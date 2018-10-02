@@ -65,6 +65,13 @@ namespace LetsEncrypt.SiteExtension.Controllers
                                 { AppSettingsAuthConfig.servicePlanResourceGroupNameKey, model.ServicePlanResourceGroupName },
                                 { AppSettingsAuthConfig.useIPBasedSSL, model.UseIPBasedSSL.ToString().ToLowerInvariant() }
                             };
+
+                            // if the user changed the default domain then we create the app settings for it.
+                            if (model.AzureWebSitesDefaultDomainName != "azurewebsites.net" && !string.IsNullOrWhiteSpace(model.AzureWebSitesDefaultDomainName))
+                            {
+                                newAppSettingsValues.Add(AppSettingsAuthConfig.azureDefaultWebSiteDomainName, model.AzureWebSitesDefaultDomainName);
+                            }
+
                             foreach (var appsetting in newAppSettingsValues)
                             {
                                 if (!webappsettings.Properties.ContainsKey(appsetting.Key))
